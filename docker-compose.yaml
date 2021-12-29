@@ -1,0 +1,32 @@
+version: '3'
+services:
+  nodejs:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      args:
+        NEXT_PUBLIC_APP_VERSION: ${NEXT_PUBLIC_APP_VERSION}
+    image: node:alpine
+    container_name: nodejs-dev
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      NEXT_PUBLIC_APP_VERSION: ${NEXT_PUBLIC_APP_VERSION}
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/home/node/app
+  nodejs-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_APP_VERSION: v1.2.2
+    image: node:10
+    container_name: nodejs-prod
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "80:3000"
+    volumes:
+      - .:/home/node/app    
